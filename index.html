@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Luxe Aura | Luxury Clothing</title>
+
+  <!-- React CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <!-- Dataset -->
+  <script src="data.js"></script>
+
+  <!-- React Code -->
+  <script type="text/babel">
+
+    const { useState } = React;
+
+    function App() {
+      const [cart, setCart] = useState([]);
+      const [filter, setFilter] = useState("All");
+
+      const filteredProducts =
+        filter === "All"
+          ? products
+          : products.filter(p => p.category === filter);
+
+      const addToCart = (product) => {
+        setCart([...cart, product]);
+      };
+
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+      return (
+        <div>
+
+          <nav className="navbar">
+            <h1>Luxe Aura</h1>
+            <div>
+              <button onClick={() => setFilter("All")}>All</button>
+              <button onClick={() => setFilter("Men")}>Men</button>
+              <button onClick={() => setFilter("Women")}>Women</button>
+              <button onClick={() => setFilter("Unisex")}>Unisex</button>
+            </div>
+            <div className="cart">
+              Cart ({cart.length}) | ₹{total}
+            </div>
+          </nav>
+
+          <div className="grid">
+            {filteredProducts.map(product => (
+              <div key={product.id} className="card">
+                <img src={product.image} />
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+                <h4>₹{product.price}</h4>
+                <button onClick={() => addToCart(product)}>
+                  Add to Cart
+                </button>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+  </script>
+</body>
+</html>
